@@ -1,0 +1,9 @@
+*.pyc
+.idea/
+venv/*
+.venv/*
+.coverage
+coverage.xml
+xunit*
+.tox/
+.DS_Store
