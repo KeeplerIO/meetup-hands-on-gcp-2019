@@ -7,3 +7,4 @@ coverage.xml
 xunit*
 .tox/
 .DS_Store
+.vscode/
