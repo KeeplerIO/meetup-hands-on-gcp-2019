@@ -1,0 +1,80 @@
+[
+  {
+    "description": "Application name",
+    "mode": "REQUIRED",
+    "name": "app",
+    "type": "STRING"
+  },
+  {
+    "description": "Application category",
+    "mode": "NULLABLE",
+    "name": "category",
+    "type": "STRING"
+  },
+  {
+    "description": "Application rating",
+    "mode": "NULLABLE",
+    "name": "rating",
+    "type": "FLOAT"
+  },
+  {
+    "description": "Number of reviews",
+    "mode": "NULLABLE",
+    "name": "reviews",
+    "type": "INTEGER"
+  },
+  {
+    "description": "Application size in MB",
+    "mode": "NULLABLE",
+    "name": "size",
+    "type": "FLOAT"
+  },
+  {
+    "description": "Number of installations",
+    "mode": "NULLABLE",
+    "name": "installs",
+    "type": "INTEGER"
+  },
+  {
+    "description": "Application pricing type",
+    "mode": "NULLABLE",
+    "name": "type",
+    "type": "STRING"
+  },
+  {
+    "description": "Application price in dollars",
+    "mode": "NULLABLE",
+    "name": "price",
+    "type": "FLOAT"
+  },
+  {
+    "description": "Application content rating",
+    "mode": "NULLABLE",
+    "name": "content_rating",
+    "type": "STRING"
+  },
+  {
+    "description": "Application genres",
+    "mode": "NULLABLE",
+    "name": "genres",
+    "type": "STRING"
+  },
+  {
+    "description": "Application last update date",
+    "mode": "NULLABLE",
+    "name": "last_updated",
+    "type": "DATE"
+  },
+  {
+    "description": "Application current version",
+    "mode": "NULLABLE",
+    "name": "current_ver",
+    "type": "STRING"
+  },
+  {
+    "description": "Application required Android version",
+    "mode": "NULLABLE",
+    "name": "android_ver",
+    "type": "STRING"
+  }
+]
