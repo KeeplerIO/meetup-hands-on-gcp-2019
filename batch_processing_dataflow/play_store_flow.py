@@ -18,9 +18,8 @@ class ProcessCSV(beam.DoFn):
                                                                      'Android_Ver'], delimiter=',')
         processed_fields = processed_csv.next()
         if processed_fields.get('Category').replace('.','').isdigit():
-            logging.info(processed_fields)
-        else:
-            return [processed_fields]
+            return None
+        return [processed_fields]
 
 
 class ParseRecord(beam.DoFn):
@@ -35,7 +34,7 @@ class ParseRecord(beam.DoFn):
                 return None
             return (float(raw_string[:-1]) * multiplier) / 1000000
         
-        element['Rating'] = float(element['Rating'])# if element['Rating'] is not None else None
+        element['Rating'] = float(element['Rating']) if element['Rating'] is not None and element['Rating'] != element['Rating'] else None
         element['Size'] = string_to_megabyte(element['Size'])
         element['Price'] = float(element['Price'].replace("$",""))
         element['Installs'] = int(element['Installs'].replace("+", "").replace(",",""))
