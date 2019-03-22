@@ -1,0 +1,20 @@
+[
+  {
+    "description": "Timestamp",
+    "mode": "REQUIRED",
+    "name": "timestamp",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "Application category",
+    "mode": "REQUIRED",
+    "name": "category",
+    "type": "STRING"
+  },
+  {
+    "description": "Category average rating",
+    "mode": "REQUIRED",
+    "name": "rating",
+    "type": "FLOAT"
+  }
+]
