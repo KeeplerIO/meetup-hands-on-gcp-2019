@@ -25,22 +25,34 @@ class ProcessCSV(beam.DoFn):
 class ParseRecord(beam.DoFn):
     def process(self, element, *args, **kwargs):
         from datetime import datetime
+        import math
         def string_to_megabyte(raw_string):
-            if raw_string.endswith('K'):
+            if raw_string.upper().endswith('K'):
                 multiplier = 1000
-            elif raw_string.endswith('M'):
+            elif raw_string.upper().endswith('M'):
                 multiplier = 1000 * 1000
             else:
                 return None
             return (float(raw_string[:-1]) * multiplier) / 1000000
+ 
+        new_element = {}
+        rating = float(element['Rating'])
+        new_element['Rating'] = rating if not math.isnan(rating) else None
+        new_element['Size'] = string_to_megabyte(element['Size'])
+        new_element['Price'] = float(element['Price'].replace("$",""))
+        new_element['Installs'] = int(element['Installs'].replace("+", "").replace(",",""))
+        new_element['Last_Updated'] = datetime.strptime(element['Last_Updated'], '%B %d, %Y').strftime('%Y-%m-%d')
+        new_element['Category'] = element['Category']
+        new_element['Genres'] = element['Genres']
+        new_element['App'] = element['App']
+        new_element['Content_Rating'] = element['Content_Rating']
+        new_element['Reviews'] = element['Reviews']
+        new_element['Android_Ver'] = element['Android_Ver']
+        new_element['Type'] = element['Type']
+        new_element['Current_Ver'] = element['Current_Ver']
         
-        element['Rating'] = float(element['Rating']) if element['Rating'] is not None and element['Rating'] != element['Rating'] else None
-        element['Size'] = string_to_megabyte(element['Size'])
-        element['Price'] = float(element['Price'].replace("$",""))
-        element['Installs'] = int(element['Installs'].replace("+", "").replace(",",""))
-        element['Last_Updated'] = datetime.strptime(element['Last_Updated'], '%B %d, %Y').isoformat()
-        logging.info(element)
-        return [element]
+        logging.info(new_element)
+        return [new_element]
 
 
 def run(argv=None):
@@ -69,14 +81,11 @@ def run(argv=None):
         
         output = lines | 'parseRecord' >> beam.ParDo(ParseRecord())
 
-        output | WriteToBigQuery(known_args.table_output,
-                                write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND,
-                                create_disposition=beam.io.BigQueryDisposition.CREATE_NEVER)
+        output | 'writeBigQuery' >> WriteToBigQuery(known_args.table_output,
+                write_disposition=beam.io.BigQueryDisposition.WRITE_TRUNCATE,
+                create_disposition=beam.io.BigQueryDisposition.CREATE_NEVER)
 
-        result = pipeline.run()
-        result.wait_until_finish()
         logging.info('Finished.')
-        logging.info('result: %s', result)
 
 
 if __name__ == '__main__':
