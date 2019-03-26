@@ -11,14 +11,48 @@ class ProcessCSV(beam.DoFn):
     def process(self, element, *args, **kwargs):
         import csv
 
-        formated_element = [element]
+        formated_element = [element.encode('utf8')]
         processed_csv = csv.DictReader(formated_element, fieldnames=['App', 'Category', 'Rating', 'Reviews', 'Size',
-                                                                     'Installs', 'Type', 'Price', 'Content Rating',
-                                                                     'Genres', 'Last Updated', 'Current Ver',
-                                                                         'Android Ver'], delimiter=',')
+                                                                     'Installs', 'Type', 'Price', 'Content_Rating',
+                                                                     'Genres', 'Last_Updated', 'Current_Ver',
+                                                                     'Android_Ver'], delimiter=',')
         processed_fields = processed_csv.next()
-        logging.info('Processed line: {}'.format(processed_csv))
-        return processed_fields
+        if processed_fields.get('Category').replace('.','').isdigit():
+            return None
+        return [processed_fields]
+
+
+class ParseRecord(beam.DoFn):
+    def process(self, element, *args, **kwargs):
+        from datetime import datetime
+        import math
+        def string_to_megabyte(raw_string):
+            if raw_string.upper().endswith('K'):
+                multiplier = 1000
+            elif raw_string.upper().endswith('M'):
+                multiplier = 1000 * 1000
+            else:
+                return None
+            return (float(raw_string[:-1]) * multiplier) / 1000000
+ 
+        new_element = {}
+        rating = float(element['Rating'])
+        new_element['Rating'] = rating if not math.isnan(rating) else None
+        new_element['Size'] = string_to_megabyte(element['Size'])
+        new_element['Price'] = float(element['Price'].replace("$",""))
+        new_element['Installs'] = int(element['Installs'].replace("+", "").replace(",",""))
+        new_element['Last_Updated'] = datetime.strptime(element['Last_Updated'], '%B %d, %Y').strftime('%Y-%m-%d')
+        new_element['Category'] = element['Category']
+        new_element['Genres'] = element['Genres']
+        new_element['App'] = element['App']
+        new_element['Content_Rating'] = element['Content_Rating']
+        new_element['Reviews'] = element['Reviews']
+        new_element['Android_Ver'] = element['Android_Ver']
+        new_element['Type'] = element['Type']
+        new_element['Current_Ver'] = element['Current_Ver']
+        
+        logging.info(new_element)
+        return [new_element]
 
 
 def run(argv=None):
@@ -41,19 +75,20 @@ def run(argv=None):
 
     pipeline_options = PipelineOptions(pipeline_args)
     with beam.Pipeline(options=pipeline_options) as pipeline:
-        lines = pipeline | 'ReadFromCsv' >> ReadFromText(known_args.input, skip_header_lines=1)
+        raw_lines = pipeline | 'ReadFromCsv' >> ReadFromText(known_args.input, skip_header_lines=1)
 
-        output = lines | 'processCsv' >> beam.ParDo(ProcessCSV())
+        lines = raw_lines | 'processCsv' >> beam.ParDo(ProcessCSV())
+        
+        output = lines | 'parseRecord' >> beam.ParDo(ParseRecord())
 
-        output | WriteToBigQuery(known_args.table_output,
-                                 write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND,
-                                 create_disposition=beam.io.BigQueryDisposition.CREATE_NEVER)
+        output | 'writeBigQuery' >> WriteToBigQuery(known_args.table_output,
+                write_disposition=beam.io.BigQueryDisposition.WRITE_TRUNCATE,
+                create_disposition=beam.io.BigQueryDisposition.CREATE_NEVER)
 
-        result = pipeline.run()
-        result.wait_until_finish()
         logging.info('Finished.')
 
 
 if __name__ == '__main__':
     logging.getLogger().setLevel(logging.INFO)
     run()
+
