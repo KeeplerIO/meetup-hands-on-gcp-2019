@@ -3,8 +3,8 @@ The following commands can be executed in Cloud Shell.
 
 ### Bigquery tables creation
 ```
-$> bq mk --table meetup-hands-on-gcp-2019:googleplaystore_batch_dataflow.play_store_streaming play-store-schema.json
-$> bq mk --table meetup-hands-on-gcp-2019:googleplaystore_batch_dataflow.play_store_streaming_window play-store-window-schema.json
+$> bq mk --table meetup-hands-on-gcp-2019:googleplaystore_streaming_dataflow.play_store_streaming play-store-schema.json
+$> bq mk --table meetup-hands-on-gcp-2019:googleplaystore_streaming_dataflow.play_store_streaming_window play-store-window-schema.json
 ```
 ### Execution
 ```
