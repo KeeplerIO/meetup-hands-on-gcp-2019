@@ -1,0 +1,11 @@
+{
+  "name": "pubsub-utils",
+  "version": "1.0.0",
+  "description": "Cloud pub/sub utils",
+  "author": "keepler.io",
+  "license": "MIT",
+  "dependencies": {
+    "@google-cloud/pubsub": "^0.27.0",
+    "@google-cloud/storage": "^2.4.2"
+  }
+}

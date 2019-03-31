@@ -8,6 +8,8 @@ xunit*
 .tox/
 .DS_Store
 .vscode/
+# Nodejs dependency directories
+node_modules/
 
 ## https://github.com/github/gitignore/blob/master/Java.gitignore
 # Compiled class file
