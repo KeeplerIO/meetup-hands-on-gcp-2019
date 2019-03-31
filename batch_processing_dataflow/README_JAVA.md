@@ -11,6 +11,7 @@ gsutil cp gs://meetup-hands-on-gcp-2019/google_play_store/googleplaystore.csv gs
 ```
 ### Bigquery table creation
 ```
+$> bq --location=EU mk --dataset meetup-hands-on-gcp-2019:googleplaystore_batch_dataflow
 $> bq mk --table meetup-hands-on-gcp-2019:googleplaystore_batch_dataflow.play_store play-store-schema.json
 ```
 ### Sample project generation (not required)
@@ -29,7 +30,7 @@ $> mvn archetype:generate \
 ```
 $> mvn compile exec:java \
        -Dexec.mainClass=io.keepler.beam.batch.KeeplerSample \
-       -Dexec.args="--runner=DataflowRunner --inputFile=gs://meetup-batch-processing/input/googleplaystore.csv --project=meetup-hands-on-gcp-2019 --tempLocation=gs://meetup-batch-processing/tmp/" \
+       -Dexec.args="--runner=DataflowRunner --inputFile=gs://meetup-batch-processing/input/googleplaystore.csv --project=meetup-hands-on-gcp-2019 --region=europe-west1 --tempLocation=gs://meetup-batch-processing/tmp/" \
        -Pdataflow-runner
 ```
 This commands should create a new Dataflow job that populates the play_store BigQuery table.

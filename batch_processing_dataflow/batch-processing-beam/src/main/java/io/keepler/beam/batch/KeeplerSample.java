@@ -297,14 +297,14 @@ public class KeeplerSample {
     static void runKeeplerSample(KeeplerSampleOptions options) {
         Pipeline p = Pipeline.create(options);
 
-        String tableSpec = "meetup-hands-on-gcp-2019:googleplaystore_batch_dataflow.play_store_v2";
+        String tableSpec = "meetup-hands-on-gcp-2019:googleplaystore_batch_dataflow.play_store";
 
         p
                 .apply("ReadLines", TextIO.read().from(options.getInputFile()))
                 .apply("Filter CSV Header", ParDo.of(new FilterCSVHeaderFn(HEADER)))
                 .apply("ParseAppRecord", ParDo.of(new ParseAppRecordFn()))
-                .apply(ParDo.of(new AppRecordToRowConverter()))
-                .apply(
+                .apply("Map to BigQuery rows", ParDo.of(new AppRecordToRowConverter()))
+                .apply("Write to BigQuery",
                         BigQueryIO.writeTableRows()
                                 .to(tableSpec)
                                 .withCreateDisposition(BigQueryIO.Write.CreateDisposition.CREATE_NEVER)
