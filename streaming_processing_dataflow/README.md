@@ -11,13 +11,13 @@ $> bq mk --table meetup-hands-on-gcp-2019:googleplaystore_streaming_dataflow.pla
 ```
 $> mvn compile exec:java \
        -Dexec.mainClass=io.keepler.beam.streaming.KeeplerSample \
-       -Dexec.args="--runner=DataflowRunner --topic=projects/meetup-hands-on-gcp-2019/topics/meetup-gcp-topic --project=meetup-hands-on-gcp-2019 --tempLocation=gs://meetup-batch-processing/tmp/ --streaming=true"
+       -Dexec.args="--runner=DataflowRunner --topic=projects/meetup-hands-on-gcp-2019/topics/meetup-gcp-topic --project=meetup-hands-on-gcp-2019 --tempLocation=gs://meetup-batch-processing/tmp/ --region=europe-west1 --streaming=true"
 ```
 This commands should create a new Dataflow job that will populate the play_store_streaming BigQuery table with records received from Pub/Sub.
 
 ```
 $> mvn compile exec:java \
        -Dexec.mainClass=io.keepler.beam.streaming.KeeplerWindowingSample \
-       -Dexec.args="--runner=DataflowRunner --topic=projects/meetup-hands-on-gcp-2019/topics/meetup-gcp-topic --project=meetup-hands-on-gcp-2019 --tempLocation=gs://meetup-batch-processing/tmp/ --streaming=true"
+       -Dexec.args="--runner=DataflowRunner --topic=projects/meetup-hands-on-gcp-2019/topics/meetup-gcp-topic --project=meetup-hands-on-gcp-2019 --tempLocation=gs://meetup-batch-processing/tmp/ --region=europe-west1 --streaming=true"
 ```
 This commands should create a new Dataflow job that will populate the play_store_streaming_window BigQuery table with aggregated records received from Pub/Sub.
