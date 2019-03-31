@@ -101,7 +101,7 @@ public class KeeplerSample {
         options.setStreaming(true);
         Pipeline p = Pipeline.create(options);
 
-        String tableSpec = "meetup-hands-on-gcp-2019:googleplaystore_batch_dataflow.play_store_streaming";
+        String tableSpec = "meetup-hands-on-gcp-2019:googleplaystore_streaming_dataflow.play_store_streaming";
 
         p
                 .apply("ReadLines", PubsubIO.readStrings().fromTopic(options.getTopic()))

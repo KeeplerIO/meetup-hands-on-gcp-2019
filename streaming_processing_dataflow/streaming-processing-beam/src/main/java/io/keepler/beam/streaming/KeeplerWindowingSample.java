@@ -111,7 +111,7 @@ public class KeeplerWindowingSample {
         options.setStreaming(true);
         Pipeline p = Pipeline.create(options);
 
-        String tableSpec = "meetup-hands-on-gcp-2019:googleplaystore_batch_dataflow.play_store_streaming_window";
+        String tableSpec = "meetup-hands-on-gcp-2019:googleplaystore_streaming_dataflow.play_store_streaming_window";
 
         PCollection<AppRecord> apps = p
                 .apply("ReadLines", PubsubIO.readStrings().fromTopic(options.getTopic()))
