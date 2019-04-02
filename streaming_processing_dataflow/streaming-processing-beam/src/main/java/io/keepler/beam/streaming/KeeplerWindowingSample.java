@@ -94,19 +94,6 @@ public class KeeplerWindowingSample {
         }
     }
 
-    static class AppRecordToKV extends DoFn<AppRecord, KV<String, Float>> {
-
-        @ProcessElement
-        public void processElement(ProcessContext c) {
-            AppRecord app = c.element();
-            String key = app.getCategory();
-            Float rating = app.getRating();
-            if (key != null && rating != null) {
-                c.output(KV.of(key, rating));
-            }
-        }
-    }
-
     static void runKeeplerWindowingSample(KeeplerSampleOptions options) {
         options.setStreaming(true);
         Pipeline p = Pipeline.create(options);
@@ -120,9 +107,9 @@ public class KeeplerWindowingSample {
 
         PCollection<KV<String, Double>> avgRating = apps
                 .apply("TimeWindow",
-                        Window.into(FixedWindows.of(Duration.standardSeconds(30))))
-                .apply("ByCategory", ParDo.of(new AppRecordToKV()))
-                .apply("AvgByCategory", Mean.perKey());
+                        <YOUR CODE>)
+                .apply("ByCategory", <YOUR CODE>)
+                .apply("AvgByCategory", <YOUR CODE>);
 
         avgRating.apply(ParDo.of(new AppRecordToRowConverter()))
                 .apply(

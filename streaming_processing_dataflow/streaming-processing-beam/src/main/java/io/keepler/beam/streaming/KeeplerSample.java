@@ -104,7 +104,7 @@ public class KeeplerSample {
         String tableSpec = "meetup-hands-on-gcp-2019:googleplaystore_streaming_dataflow.play_store_streaming";
 
         p
-                .apply("ReadLines", PubsubIO.readStrings().fromTopic(options.getTopic()))
+                .apply("ReadLines", <YOUR CODE>)
                 .apply("Filter CSV Header", ParDo.of(new FilterCSVHeaderFn(HEADER)))
                 .apply("ParseAppRecord", ParDo.of(new ParseAppRecordFn(HEADER)))
                 .apply("Map to BigQuery rows", ParDo.of(new AppRecordToRowConverter()))
