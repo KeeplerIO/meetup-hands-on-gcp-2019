@@ -72,11 +72,7 @@ public class KeeplerSample {
 
         @ProcessElement
         public void processElement(ProcessContext c) {
-            String row = c.element();
-            // Filter out elements that match the HEADER
-            if (!row.equals(this.headerFilter)) {
-                c.output(row);
-            }
+            <YOUR CODE>
         }
     }
 
@@ -267,46 +263,17 @@ public class KeeplerSample {
         }
     }
 
-    /**
-     * Converts AppRecords into BigQuery rows.
-     */
-    static class AppRecordToRowConverter extends DoFn<AppRecord, TableRow> {
-        private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-
-        @ProcessElement
-        public void processElement(ProcessContext c) {
-            c.output(
-                    new TableRow()
-                            .set("app", c.element().getApp())
-                            .set("category", c.element().getCategory())
-                            .set("rating", c.element().getRating())
-                            .set("reviews", c.element().getReviews())
-                            .set("size", c.element().getSize())
-                            .set("installs", c.element().getInstalls())
-                            .set("type", c.element().getType())
-                            .set("price", c.element().getPrice())
-                            .set("content_rating", c.element().getContentRating())
-                            .set("genres", c.element().getGenres())
-                            .set("last_updated", df.format(c.element().getLastUpdated()))
-                            .set("current_ver", c.element().getCurrentVersion())
-                            .set("android_ver", c.element().getAndroidVersion())
-            );
-        }
-    }
-
     static void runKeeplerSample(KeeplerSampleOptions options) {
         Pipeline p = Pipeline.create(options);
 
-        String tableSpec = "meetup-hands-on-gcp-2019:googleplaystore_batch_dataflow.play_store";
-
         p
-                .apply("ReadLines", TextIO.read().from(options.getInputFile()))
-                .apply("Filter CSV Header", ParDo.of(new FilterCSVHeaderFn(HEADER)))
-                .apply("ParseAppRecord", ParDo.of(new ParseAppRecordFn()))
-                .apply("Map to BigQuery rows", ParDo.of(new AppRecordToRowConverter()))
+                .apply("ReadLines", <YOUR CODE>)
+                .apply("Filter CSV Header", <YOUR CODE>)
+                .apply("ParseAppRecord", <YOUR CODE>)
+                .apply("Map to BigQuery rows", <YOUR CODE>)
                 .apply("Write to BigQuery",
                         BigQueryIO.writeTableRows()
-                                .to(tableSpec)
+                                .to(<YOUR CODE>)
                                 .withCreateDisposition(BigQueryIO.Write.CreateDisposition.CREATE_NEVER)
                                 .withWriteDisposition(BigQueryIO.Write.WriteDisposition.WRITE_TRUNCATE));
 
