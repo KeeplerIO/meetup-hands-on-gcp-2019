@@ -1,4 +1,4 @@
-## Step processing with Step Functions
+## Step processing with Cloud Functions
 The following commands can be executed in Cloud Shell.
 
 ### Bucket creation
@@ -13,8 +13,8 @@ $> bq --location=EU mk --dataset meetup-hands-on-gcp-2019:googleplaystore_step
 $> bq mk --table meetup-hands-on-gcp-2019:googleplaystore_step.play_store play-store-schema.json
 ```
 
-## Execute step function
-In order to execute step functions the source file needs to be loaded to Cloud Storage bucket.
+## Execute Cloud Function
+In order to execute cloud functions the source file needs to be loaded to Cloud Storage bucket.
 
 ```
 gsutil cp dataset/input_googleplaystore.csv gs://meetup-step-processing-input/input/
