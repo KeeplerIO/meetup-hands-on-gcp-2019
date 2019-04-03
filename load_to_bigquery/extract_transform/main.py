@@ -1,4 +1,5 @@
 import pandas as pd
+import os
 
 
 def transform_to_mb(val):
@@ -20,5 +21,6 @@ def extract_and_transform(event, context):
     dataset['Installs'] = dataset['Installs'].str.replace("+", "").str.replace(",", "").astype(int)
     dataset['Last Updated'] = pd.to_datetime(dataset['Last Updated'], format='%B %d, %Y')
     dataset['Size'] = dataset['Size'].apply(transform_to_mb)
-    dataset.to_csv('gs://meetup_load_transformed/{0}'.format(file), sep=',', header=True, index=False)
+    bucket_name = os.environ.get('BUCKET', 'meetup-step-processing-output')
+    dataset.to_csv('gs://{0}/{1}'.format(bucket_name, file), sep=',', header=True, index=False)
     print('Job finished.')
