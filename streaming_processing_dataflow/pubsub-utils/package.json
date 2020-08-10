@@ -6,6 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "@google-cloud/pubsub": "^2.4.0",
-    "@google-cloud/storage": "^5.1.2"
+    "@google-cloud/storage": "^5.1.2",
+    "dot-prop": "^5.2.0"
   }
 }
